@@ -33,4 +33,4 @@ There are 4 key logical steps:
 
 The best way to contribute is via a pull request.
 
-Please note that I don't write that much code professionally anymore and I haven't written any "real" Python application since the early 2000's.
+Please note that I don't write that much code professionally anymore and I haven't written any "real" Python application since the early 2000's. Python is usually installed on most Linux/Unix machines and that's the main reason for choosing Python.
