@@ -31,6 +31,6 @@ There are 4 key logical steps:
 
 # How to contribute?
 
-The best way to contribute is via a pull request.
+The best way to contribute is via [pull requests](https://github.com/yveszoundi/seccompian/pulls).
 
-Please note that I don't write that much code professionally anymore and I haven't written any "real" Python application since the early 2000's. Python is usually installed on most Linux/Unix machines and that's the main reason for choosing Python.
+I haven't written any "real" Python application since the early 2000's. Python is usually installed on most Linux/Unix machines and that's the main reason for choosing Python.
