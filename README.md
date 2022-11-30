@@ -2,7 +2,7 @@
 
 # What is this?
 
-`seccompian` is a brute force tool for [seccomp]() profile generation (=Python 3=). 
+`seccompian` is a brute force tool for [seccomp]() profile generation (`Python 3`). 
 
 - The tool attempts to generate a `seccomp` security profile based on `simulated runs` (test datasets following the `happy path`)
 - The main use-case is one-of processes running inside a container engine (i.e., [Docker](https://www.docker.com/), [Podman](https://podman.io/))
@@ -15,8 +15,8 @@ The great thing about brute-force is that you don't need to be smart, as long as
 
 I needed to generate a `seccomp` security profile for a container image (`amd64` and `arm64` platforms).
 
-- For `arm64`, I was able to easily generate a file on `amd64` via [oci-seccomp-bpf-hook](https://github.com/containers/oci-seccomp-bpf-hook.git)
-- For `arm64`, I struggled with tooling running inside [QEMU](https://www.qemu.org/) from an `amd64` host machine (obscure errors)
+- For `amd64`, I was able to easily generate a file on `amd64` via [oci-seccomp-bpf-hook](https://github.com/containers/oci-seccomp-bpf-hook.git)
+- For `arm64`, I struggled with tooling running inside [QEMU](https://www.qemu.org/) from an `amd64` host machine (obscure errors, coupled with overall slowness of emulated `arm64` on `amd64`)
 
 After investigating tooling and trying to make sense of errors, I was like "pure brute-force does sometimes work...".
 
@@ -70,3 +70,9 @@ I haven't written any "real" Python application since the early 2000's, but here
 - Speed doesn't matter that much as we're running mostly shell commands (note: we're not doing anything "in parallel")
 
 
+# References
+
+- https://docs.docker.com/engine/security/seccomp/
+- https://github.com/microsoft/docker/blob/master/docs/security/seccomp.md
+- https://kubernetes.io/docs/tutorials/security/seccomp/
+- https://man7.org/linux/man-pages/man2/seccomp.2.html
