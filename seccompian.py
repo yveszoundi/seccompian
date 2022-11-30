@@ -16,6 +16,7 @@ SYSCALL_NAMES_MINIMAL = {
   "clone",
   "close",
   "execve",
+  "exit",
   "exit_group",
   "fcntl",
   "futex",
@@ -393,8 +394,8 @@ def run_test_successfully(cmd):
 
   with subprocess.Popen(cmdline, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
     for line in p.stdout:
-        print(line, end='') # process line here
-  
+      print(line, end='') # process line here
+
   return p.returncode == 0
 
 def make_true_bools(count):
@@ -468,7 +469,7 @@ def main():
 
       if failed:
         keep_table[idx] = True
-        
+
   print("Generating file seccomp security profile")
   seccomp_profile = SeccompProfile(keep_table, baseline);
   save_seccomp_as_json(seccomp_profile, seccomp_file_dest)
