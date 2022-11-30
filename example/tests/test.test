@@ -1,0 +1,6 @@
+/usr/bin/podman
+run
+--rm
+--security-opt
+seccomp=/home/vip/testing/profile.json
+docker.io/hello-world
