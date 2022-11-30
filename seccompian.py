@@ -19,7 +19,6 @@ SYSCALL_NAMES_MINIMAL = {
   "exit",
   "exit_group",
   "fcntl",
-  "futex",
   "gettid",
   "mmap",
   "openat",
