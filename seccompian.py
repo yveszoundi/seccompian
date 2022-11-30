@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 
+import logging
 import os
 import sys
 import argparse
 import copy
 import subprocess
 import json
+
+log = logging.getLogger()
+log.setLevel(logging.INFO)
+ch = logging.StreamHandler(sys.stdout)
+ch.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+log.addHandler(ch)
 
 APP_VERSION = "0.0.1"
 
@@ -389,7 +398,7 @@ class Test:
 
 def run_test_successfully(cmd):
   cmdline = cmd.command_and_arguments
-  print("Running command:", cmdline)
+  log.info("Running command: %s" % cmdline)
 
   with subprocess.Popen(cmdline, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
     for line in p.stdout:
@@ -420,7 +429,9 @@ def parse_test_file(test_file):
 
   with open(test_file, 'r') as f:
     for line in f.readlines():
-      test_args.append(line.strip())
+      line_stripped = line.strip()
+      if len(line_stripped) != 0:
+        test_args.append(line_stripped)
 
   if len(test_args) == 0:
     raiseRuntimeError("No command or arguments found in test file '{test_file}".format(test_file = test_file))
@@ -438,11 +449,11 @@ def main():
   tests_folder = args.tests_folder
 
   if not os.path.exists(tests_folder):
-    print("The tests folder '{tests_folder}' doesn't seem to exist!".format(tests_folder = tests_folder), file = sys.stderr)
+    log.error("The tests folder '{tests_folder}' doesn't seem to exist!".format(tests_folder = tests_folder))
     sys.exit(1)
 
   if not os.path.isdir(tests_folder):
-    print("The tests folder '{tests_folder}' doesn't seem to be a folder!".format(tests_folder = tests_folder), file = sys.stderr)
+    log.error("The tests folder '{tests_folder}' doesn't seem to be a folder!".format(tests_folder = tests_folder))
     sys.exit(1)
 
   tests = parse_test_files(tests_folder)
@@ -454,7 +465,7 @@ def main():
     syscall_name = baseline[idx]
 
     if syscall_name not in SYSCALL_NAMES_MINIMAL:
-      print("\n>>>>>>> Testing syscall '{syscall_name}' - {idx}/{total}".format(syscall_name = syscall_name, idx = idx + 1, total = syscall_count))
+      log.info("Testing syscall '{syscall_name}' - {idx}/{total}".format(syscall_name = syscall_name, idx = idx + 1, total = syscall_count))
       keep_table[idx] = False
       failed = False
 
@@ -469,7 +480,7 @@ def main():
       if failed:
         keep_table[idx] = True
 
-  print("Generating file seccomp security profile")
+  log.info("Generating file seccomp security profile")
   seccomp_profile = SeccompProfile(keep_table, baseline);
   save_seccomp_as_json(seccomp_profile, seccomp_file_dest)
 

@@ -1,5 +1,3 @@
-![](./images/header.png)
-
 THIS IS STILL WORK IN PROGRESS!!
 
 # What is this?
@@ -10,8 +8,6 @@ THIS IS STILL WORK IN PROGRESS!!
 - The main use-case is one-of processes running inside a container engine (i.e., [Docker](https://www.docker.com/), [Podman](https://podman.io/))
 
 The great thing about brute-force is that you don't need to be smart, as long as you can wait just a little bit...
-
-**WARNING**: Not tested yet, this is a quick rewrite of a one-off tool written in Rust with lots of hardcoded details.
 
 # Why this?
 
@@ -70,7 +66,6 @@ I haven't written any "real" Python application since the early 2000's, but here
 - Python3 is usually installed on most Linux or Unix-like machines (Mac OS, BSD)
 - The code is just about getting things done as "quickly" as possible ("programming-wise")
 - Speed doesn't matter that much as we're running mostly shell commands (note: we're not doing anything "in parallel")
-
 
 # References
 
