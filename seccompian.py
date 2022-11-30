@@ -406,14 +406,6 @@ def run_test_successfully(cmd):
 
   return p.returncode == 0
 
-def make_true_bools(count):
-  ret = []
-
-  for i in range(0, count):
-    ret.append(True)
-
-  return ret
-
 def parse_test_files(tests_folder):
   tests = []
 
@@ -459,7 +451,7 @@ def main():
   tests = parse_test_files(tests_folder)
   baseline = copy.deepcopy(SYSCALL_NAMES_ALL)
   syscall_count = len(baseline)
-  keep_table = make_true_bools(syscall_count)
+  keep_table = [ True for i in range(syscall_count) ]
 
   for idx, x in enumerate(baseline):
     syscall_name = baseline[idx]
