@@ -374,8 +374,8 @@ class Syscalls:
     self.names = []
     self.action = "SCMP_ACT_ALLOW"
 
-    for idx, x in enumerate(keep_table):
-      if x:
+    for idx, keep_syscall in enumerate(keep_table):
+      if keep_syscall:
         self.names.append(baseline[idx])
 
 class SeccompProfile:
@@ -387,10 +387,8 @@ class SeccompProfile:
     return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 def save_seccomp_as_json(seccomp_profile, dest_file):
-  json_string = seccomp_profile.toJSON()
-
   with open(dest_file, 'w') as f:
-    f.write(json_string)
+    f.write(seccomp_profile.toJSON())
 
 class Test:
   def __init__(self, command_and_arguments):
@@ -422,6 +420,7 @@ def parse_test_file(test_file):
   with open(test_file, 'r') as f:
     for line in f.readlines():
       line_stripped = line.strip()
+
       if len(line_stripped) != 0:
         test_args.append(line_stripped)
 
@@ -441,11 +440,11 @@ def main():
   tests_folder = args.tests_folder
 
   if not os.path.exists(tests_folder):
-    log.error("The tests folder '{tests_folder}' doesn't seem to exist!".format(tests_folder = tests_folder))
+    log.critical("The tests folder '{tests_folder}' doesn't seem to exist!".format(tests_folder = tests_folder))
     sys.exit(1)
 
   if not os.path.isdir(tests_folder):
-    log.error("The tests folder '{tests_folder}' doesn't seem to be a folder!".format(tests_folder = tests_folder))
+    log.critical("The tests folder '{tests_folder}' doesn't seem to be a folder!".format(tests_folder = tests_folder))
     sys.exit(1)
 
   tests = parse_test_files(tests_folder)
@@ -459,20 +458,16 @@ def main():
     if syscall_name not in SYSCALL_NAMES_MINIMAL:
       log.info("Testing syscall '{syscall_name}' - {idx}/{total}".format(syscall_name = syscall_name, idx = idx + 1, total = syscall_count))
       keep_table[idx] = False
-      failed = False
 
       for test in tests:
         seccomp_profile = SeccompProfile(keep_table, baseline);
         save_seccomp_as_json(seccomp_profile, seccomp_file_dest)
 
         if not run_test_successfully(test):
-          failed = True
+          keep_table[idx] = True
           break
 
-      if failed:
-        keep_table[idx] = True
-
-  log.info("Generating file seccomp security profile")
+  log.info("Generating final seccomp-json security profile")
   seccomp_profile = SeccompProfile(keep_table, baseline);
   save_seccomp_as_json(seccomp_profile, seccomp_file_dest)
 

@@ -11,14 +11,16 @@ The great thing about brute-force is that you don't need to be smart, as long as
 
 # Why this?
 
+tl;dr Because sometimes brute force is just OK...
+
 I needed to generate a `seccomp` security profile for a container image (`amd64` and `arm64` platforms).
 
 - For `amd64`, I was able to easily generate a file on `amd64` via [oci-seccomp-bpf-hook](https://github.com/containers/oci-seccomp-bpf-hook.git)
 - For `arm64`, I struggled with tooling running inside [QEMU](https://www.qemu.org/) from an `amd64` host machine (obscure errors, coupled with overall slowness of emulated `arm64` on `amd64`)
 
-After investigating tooling and trying to make sense of errors, I was like "pure brute-force does sometimes work...".
-
 # How does this work?
+
+The tool runs a bunch of tests (happy path) and gradually disables unrequired system calls.
 
 There are 4 key logical steps:
 
