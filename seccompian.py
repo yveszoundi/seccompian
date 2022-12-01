@@ -400,7 +400,7 @@ def run_test_successfully(cmd):
 
   with subprocess.Popen(cmdline, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
     for line in p.stdout:
-      print(line, end='') # process line here
+      print(line, end='')
 
   return p.returncode == 0
 
@@ -451,12 +451,13 @@ def main():
   baseline = copy.deepcopy(SYSCALL_NAMES_ALL)
   syscall_count = len(baseline)
   keep_table = [ True for i in range(syscall_count) ]
+  progress_template = "Testing syscall '{syscall_name}' - {idx}/{total}"
 
   for idx, x in enumerate(baseline):
     syscall_name = baseline[idx]
 
     if syscall_name not in SYSCALL_NAMES_MINIMAL:
-      log.info("Testing syscall '{syscall_name}' - {idx}/{total}".format(syscall_name = syscall_name, idx = idx + 1, total = syscall_count))
+      log.info(progress_template.format(syscall_name = syscall_name, idx = idx + 1, total = syscall_count))
       keep_table[idx] = False
 
       for test in tests:
