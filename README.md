@@ -1,10 +1,8 @@
-THIS IS STILL WORK IN PROGRESS!!
-
 # What is this?
 
 `seccompian` is a brute force tool for [seccomp]() profile generation (`Python 3`). 
 
-- The tool attempts to generate a `seccomp` security profile based on `simulated runs` (test datasets following the `happy path`)
+- The tool attempts to generate a `seccomp` security profile based on `simulated runs` (test datasets)
 - The main use-case is one-of processes running inside a container engine (i.e., [Docker](https://www.docker.com/), [Podman](https://podman.io/))
 
 The great thing about brute-force is that you don't need to be smart, as long as you can wait just a little bit...
@@ -20,7 +18,7 @@ I needed to generate a `seccomp` security profile for a container image (`amd64`
 
 # How does this work?
 
-The tool runs a bunch of tests (happy path) and gradually disables unrequired system calls.
+The tool runs a bunch of user-defined tests (happy path) and gradually disables unrequired system calls.
 
 There are 4 key logical steps:
 
