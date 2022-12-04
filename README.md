@@ -1,3 +1,5 @@
+tl;dr Because sometimes brute force is just OK...
+
 # What is this?
 
 `seccompian` is a brute force tool for [seccomp]() profile generation (`Python 3`). 
@@ -8,8 +10,6 @@
 The great thing about brute-force is that you don't need to be smart, as long as you can wait just a little bit...
 
 # Why this?
-
-tl;dr Because sometimes brute force is just OK...
 
 I needed to generate a `seccomp` security profile for a container image (`amd64` and `arm64` platforms).
 
