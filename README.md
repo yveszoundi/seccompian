@@ -59,13 +59,20 @@ Please consult the `example/tests` folder for more details: essentially you put 
 
 # How to contribute?
 
-The best way to contribute is via [pull requests](https://github.com/yveszoundi/seccompian/pulls).
+**The best way to contribute** is via [pull requests](https://github.com/yveszoundi/seccompian/pulls).
 
 I haven't written any "real" Python application since the early 2000's, but here are the main reasons for using Python in this project:
 
 - Python3 is usually installed on most Linux or Unix-like machines (Mac OS, BSD)
 - The code is just about getting things done as "quickly" as possible ("programming-wise")
 - Speed doesn't matter that much as we're running mostly shell commands (note: we're not doing anything "in parallel")
+
+# Related efforts
+
+- https://github.com/containers/oci-seccomp-bpf-hook
+- https://github.com/shamedgh/confine
+- https://github.com/blacktop/seccomp-gen
+- https://github.com/antitree/syscall2seccomp
 
 # References
 
