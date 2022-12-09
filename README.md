@@ -34,6 +34,10 @@ There are 4 key logical steps:
 
 ## Displaying the options
 
+The default process timeout is `2 minutes`. 
+- An explicit timeout provides both reasonable and clear expecations
+- It is important to set a timeout to avoid blocking operations (missing syscalls preventing tests from exiting)
+
 ```
 $ python3 seccompian.py -h
 usage: seccompian.py [-h] --tests-folder TESTS_FOLDER --seccomp-file-dest SECCOMP_FILE_DEST [--version]
