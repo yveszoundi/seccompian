@@ -18,6 +18,8 @@ log.addHandler(ch)
 
 APP_VERSION = "0.0.1"
 
+DEFAULT_TEST_TIMEOUT = 120
+
 # Need a reasonable baseline to start with
 # See https://gist.github.com/invidian/34b6222a030718b4b4d77cde25725dcf
 SYSCALL_NAMES_MINIMAL = {
@@ -391,30 +393,32 @@ def save_seccomp_as_json(seccomp_profile, dest_file):
     f.write(seccomp_profile.toJSON())
 
 class Test:
-  def __init__(self, command_and_arguments):
+  def __init__(self, command_and_arguments, timeout):
     self.command_and_arguments = command_and_arguments
+    self.timeout = timeout
 
 def run_test_successfully(cmd):
   cmdline = cmd.command_and_arguments
   log.info("Running command: %s" % cmdline)
 
-  with subprocess.Popen(cmdline, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
-    for line in p.stdout:
-      print(line, end='')
+  try:
+    p = subprocess.run(cmdline, timeout=cmd.timeout)
+    return p.returncode == 0
+  except subprocess.TimeoutExpired:
+    print("Test took too long to complete")
+    return False
 
-  return p.returncode == 0
-
-def parse_test_files(tests_folder):
+def parse_test_files(tests_folder, timeout):
   tests = []
 
   for file in os.listdir(tests_folder):
     if file.endswith(".test"):
-      test = parse_test_file(os.path.join(tests_folder, file))
+      test = parse_test_file(os.path.join(tests_folder, file), timeout)
       tests.append(test)
 
   return tests
 
-def parse_test_file(test_file):
+def parse_test_file(test_file, timeout):
   test_args = []
 
   with open(test_file, 'r') as f:
@@ -427,17 +431,24 @@ def parse_test_file(test_file):
   if len(test_args) == 0:
     raiseRuntimeError("No command or arguments found in test file '{test_file}".format(test_file = test_file))
 
-  return Test(test_args)
+  return Test(test_args, timeout)
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument("--tests-folder", type=str, required=True)
+  parser.add_argument("--tests-timeout-secs", type=int, default=DEFAULT_TEST_TIMEOUT, required=False)
   parser.add_argument("--seccomp-file-dest", type=str, required=True)
   parser.add_argument("--version", action="version", version="%(prog)s " + APP_VERSION)
 
   args = parser.parse_args()
   seccomp_file_dest = args.seccomp_file_dest
   tests_folder = args.tests_folder
+  cmd_timeout = args.tests_timeout_secs
+
+  if cmd_timeout is not None:
+    if cmd_timeout <= 0:
+      log.critical("The tests timeout must be greater than zero seconds!")
+      sys.exit(1)
 
   if not os.path.exists(tests_folder):
     log.critical("The tests folder '{tests_folder}' doesn't seem to exist!".format(tests_folder = tests_folder))
@@ -447,7 +458,7 @@ def main():
     log.critical("The tests folder '{tests_folder}' doesn't seem to be a folder!".format(tests_folder = tests_folder))
     sys.exit(1)
 
-  tests = parse_test_files(tests_folder)
+  tests = parse_test_files(tests_folder, cmd_timeout)
   baseline = copy.deepcopy(SYSCALL_NAMES_ALL)
   syscall_count = len(baseline)
   keep_table = [ True for i in range(syscall_count) ]
