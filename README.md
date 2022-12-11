@@ -40,11 +40,14 @@ The default process timeout is `2 minutes`.
 
 ```
 $ python3 seccompian.py -h
-usage: seccompian.py [-h] --tests-folder TESTS_FOLDER --seccomp-file-dest SECCOMP_FILE_DEST [--version]
+python3 seccompian.py -h
+usage: seccompian.py [-h] --tests-folder TESTS_FOLDER [--tests-timeout-secs TESTS_TIMEOUT_SECS] --seccomp-file-dest
+                     SECCOMP_FILE_DEST [--version]
 
 options:
   -h, --help            show this help message and exit
   --tests-folder TESTS_FOLDER
+  --tests-timeout-secs TESTS_TIMEOUT_SECS
   --seccomp-file-dest SECCOMP_FILE_DEST
   --version             show program's version number and exit
 ```
